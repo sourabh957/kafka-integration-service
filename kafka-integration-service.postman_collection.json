@@ -1,0 +1,81 @@
+{
+  "info": {
+    "_postman_id": "f1b62555-4349-4da6-979e-9411d98f53d2",
+    "name": "Kafka Integration Service",
+    "description": "Requests for publishing order events through the Kafka Integration Service. Start the Kafka infrastructure before running the Spring Boot service and this collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Messages",
+      "item": [
+        {
+          "name": "Publish Order Created Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Message accepted\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.expect(pm.response.text()).to.eql(\"Message sent to Kafka topic\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": \"event-1001\",\n  \"eventType\": \"ORDER_CREATED\",\n  \"orderId\": \"order-1001\",\n  \"customerId\": \"customer-42\",\n  \"amount\": 1499.00,\n  \"timestamp\": \"2026-09-19T10:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/messages?key={{messageKey}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "messages"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{messageKey}}"
+                }
+              ]
+            },
+            "description": "Publishes an OrderCreatedEvent to kafka-topic-1. Kafka must already be running, followed by the Spring Boot service."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "messageKey",
+      "value": "order-1001",
+      "type": "string"
+    }
+  ]
+}

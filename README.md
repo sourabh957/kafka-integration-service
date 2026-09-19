@@ -95,6 +95,8 @@ curl --request POST 'http://localhost:8081/api/v1/messages?key=order-1001' \
 
 The API responds with `Message sent to Kafka topic`, and the service log prints the consumed event. You can also inspect the topic and message in Kafka UI.
 
+Alternatively, import `kafka-integration-service.postman_collection.json` into Postman and run **Publish Order Created Event**. The collection provides configurable `baseUrl` and `messageKey` variables and verifies the successful response.
+
 ## Stop components independently
 
 Stop the Spring Boot service with `Ctrl+C`. Kafka continues running.
